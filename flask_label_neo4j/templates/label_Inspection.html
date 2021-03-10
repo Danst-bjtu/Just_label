@@ -125,9 +125,9 @@
                     document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
                     document.getElementById('wenben').innerText=mylist[0]['q']['content'];
                     for(var i=1;i<mylist.length;i++){
-                        document.getElementById('head_entity').innerHTML=mylist[i]['m.name'];
+                        document.getElementById('head_entity').innerHTML=mylist[i]['m.name']+"（"+mylist[i]['labels(m)'][0]+"）";
                         document.getElementById('relation_name').innerHTML=mylist[i]['type(rr)'];
-                        document.getElementById('tail_entity').innerHTML=mylist[i]['p.name'];
+                        document.getElementById('tail_entity').innerHTML=mylist[i]['p.name']+"（"+mylist[i]['labels(p)'][0]+"）";
                         var table = document.getElementById("addrelationTable");
                         var tbody = document.getElementById("relationtempleteTBody");
                         var newTBody = tbody.cloneNode(true);
@@ -161,9 +161,9 @@
                         $("#entitytempleteTBody").nextAll().remove();
                         $("#relationtempleteTBody").nextAll().remove();
                         for(var i=1;i<mylist.length;i++){
-                            document.getElementById('head_entity').innerHTML=mylist[i]['m.name'];
+                            document.getElementById('head_entity').innerHTML=mylist[i]['m.name']+"（"+mylist[i]['labels(m)'][0]+"）";
                             document.getElementById('relation_name').innerHTML=mylist[i]['type(rr)'];
-                            document.getElementById('tail_entity').innerHTML=mylist[i]['p.name'];
+                            document.getElementById('tail_entity').innerHTML=mylist[i]['p.name']+"（"+mylist[i]['labels(p)'][0]+"）";
                             var table = document.getElementById("addrelationTable");
                             var tbody = document.getElementById("relationtempleteTBody");
                             var newTBody = tbody.cloneNode(true);
@@ -199,9 +199,9 @@
                         $("#entitytempleteTBody").nextAll().remove();
                         $("#relationtempleteTBody").nextAll().remove();
                         for(var i=1;i<mylist.length;i++){
-                            document.getElementById('head_entity').innerHTML=mylist[i]['m.name'];
+                            document.getElementById('head_entity').innerHTML=mylist[i]['m.name']+"（"+mylist[i]['labels(m)'][0]+"）";
                             document.getElementById('relation_name').innerHTML=mylist[i]['type(rr)'];
-                            document.getElementById('tail_entity').innerHTML=mylist[i]['p.name'];
+                            document.getElementById('tail_entity').innerHTML=mylist[i]['p.name']+"（"+mylist[i]['labels(p)'][0]+"）";
                             var table = document.getElementById("addrelationTable");
                             var tbody = document.getElementById("relationtempleteTBody");
                             var newTBody = tbody.cloneNode(true);
@@ -239,77 +239,6 @@
             });
         }
 
-        /*
-        *增加实体模板行
-        */
-		function addentityRow(obj) {
-			var entity_name = window.getSelection(0).toString();
-			var entity_label = obj.innerText.toString();
-			document.getElementById('entity_name').innerHTML=entity_name+"（"+entity_label+"）";
-            document.getElementById("wenben").innerHTML = document.getElementById("wenben").innerHTML;
-			var table = document.getElementById("addentityTable");
-            var tbody = document.getElementById("entitytempleteTBody");
-            var newTBody = tbody.cloneNode(true);
-            newTBody.style.display="";
-            var footTBody = document.getElementById("entityfootTbody");
-            return table.insertBefore(newTBody,footTBody);
-        }
-        // 得到点击的实体名称与标签
-        function getSelectEntity(obj){
-            selectHeadEntity = obj.innerText.toString();
-            document.getElementById("relation_model").innerText="请选择 <"+selectHeadEntity+"> 的关系标签与尾实体"
-			$("#tailEntity").nextAll().remove();
-			for(var x=1;x<entity_name_label.length;x++){
-				var newBtn = document.getElementById("tailEntity").cloneNode(true);
-				// newBtn.id = "tail_Entity_Copy";
-				newBtn.innerHTML=entity_name_label[x].innerHTML;
-				newBtn.style.display="";
-				var oldBtn = document.getElementById('tailEntity');
-				var parentNode = oldBtn.parentNode;
-				parentNode.insertBefore(newBtn,oldBtn.nextSiblings);
-			}
-            $(relation_label_model).modal();
-        }
-
-        /**
-        *向实体模板中填充值
-        */
-		function setentityValue(obj){
-            var tbody=addentityRow(obj);
-        }
-                /*
-        *增加关系模板行
-        */
-        function addrelationRow(obj) {
-			var relation_label = $("input[name='optradio']:checked").val(); //得到选中的关系类别
-            var tail_entity = obj.innerText.toString(); //得到选中的尾实体
-			document.getElementById('head_entity').innerHTML=selectHeadEntity;
-			//document.getElementById('input_head_entity').setAttribute("value",selectHeadEntity);
-            document.getElementById('relation_name').innerHTML=relation_label;
-			//document.getElementById('input_relation_name').setAttribute("value",relation_label);
-			document.getElementById('tail_entity').innerHTML=tail_entity;
-			//document.getElementById('input_tail_entity').setAttribute("value",tail_entity);
-            var table = document.getElementById("addrelationTable");
-            var tbody = document.getElementById("relationtempleteTBody");
-            var newTBody = tbody.cloneNode(true);
-            newTBody.style.display="";
-            var footTBody = document.getElementById("relationfootTbody");
-            return table.insertBefore(newTBody,footTBody);
-        }
-        /*
-        *删除关系模板行
-        */
-        function deleterelationRow(obj) {
-            var tbody = obj.parentNode.parentNode.parentNode;
-            var table = document.getElementById("addrelationTable");
-            table.removeChild(tbody);
-        }
-        /**
-        *向关系模板中填充值
-        */
-        function setrelationValue(obj){
-            var tbody=addrelationRow(obj);
-        }
     </script>
 
 </body>

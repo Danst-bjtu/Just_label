@@ -58,7 +58,7 @@ def next_labelfenju():
     skip = request.args.get('skip')
     item_id = request.args.get('item_id')
     content = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" and q.islabel='yes' return ID(q),q order by ID(q) SKIP "+skip+" LIMIT 1").data()
-    triple = graph.run("match (n:`单句`)-[r:`三元组`]->(m),(m)-[rr]->(p) where ID(n)="+str(content[0]['ID(q)'])+" return m.name,type(rr),p.name order by ID(m)").data()
+    triple = graph.run("match (n:`单句`)-[r:`三元组`]->(m),(m)-[rr]->(p) where ID(n)="+str(content[0]['ID(q)'])+" return m.name,labels(m),type(rr),p.name,labels(p) order by ID(m)").data()
     return jsonify(content+triple)
 
 
