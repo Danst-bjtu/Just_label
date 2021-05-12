@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, send_from_directory
+from flask import render_template, Blueprint, send_from_directory, send_file, after_this_request, current_app
 from flask import make_response
 from flask import Flask, session, redirect, url_for, escape, request, flash
 from werkzeug.utils import secure_filename
@@ -47,6 +47,7 @@ def add_item():
         'username'] + "'})-[r: 创建项目]->(n:label_items) return ID(n),n").data()
     return render_template('index.html', label_items=label_items, error="添加成功!")
 
+
 # 不合格
 @label_items.route("/reset_date/<item_id>")
 def reset_date(item_id):
@@ -64,4 +65,24 @@ def del_label_item(item_id):
         return redirect(url_for('Labelitem'))
     except(FileNotFoundError):
         return redirect(url_for('Labelitem'))
+
+
+@label_items.route("/export_date",methods=['POST', 'GET'])
+def export_date():
+    item_id = request.form['item_id']
+    export = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(p),(p)-[l:`三元组`]->(q),(q)-[w]->(t) where ID(n)="+item_id+" return q.name,type(w),t.name").data()
+    with open("./export/"+item_id+".nt", "w", encoding='utf-8') as f:
+        for item in export:
+            f.write("<"+item['q.name']+"> "+"<"+item['type(w)']+"> "+"<"+item['t.name']+">.\n")
+
+    # @after_this_request
+    # def cleanup(response):
+    #     os.remove("./"+item_id+".nt")
+    #     return response
+
+
+    return send_from_directory("./export/",filename=item_id+".nt",as_attachment=True)
+
+
+
 

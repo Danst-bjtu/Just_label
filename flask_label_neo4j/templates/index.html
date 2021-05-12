@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index</title>
-    <link rel="icon" href="../static/images/logo.png">
+    <link rel="icon" href="../static/images/favicon.png">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <script src="../static/js/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
-    <script src="./js/vue.min.js"></script>
     <style type="text/css">
         body {
             padding: 0;
@@ -91,6 +90,7 @@
                                 <a href="/update_label/{{item['ID(n)']}}"><input type="button" value='标签' class="btn btn-info"></a>&nbsp
                                 <input id="del" type="button" value='删除' class="btn btn-primary" d="{{item['ID(n)']}}" onclick="del(this)">&nbsp
                                 <input id="reset" type="button" value='清空' class="btn btn-warning" d="{{item['ID(n)']}}" onclick="reset(this)">
+                                <input id="export" type="button" value='导出' class="btn btn-warning" d="{{item['ID(n)']}}" onclick="texport(this)">
                             </td>
                         </tr>
                     {% endfor %}
@@ -119,7 +119,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">上传文件:<span style="color:#ff0000;">(暂支持txt、docx类型文件，最大上传限制:10MB)</span></label>
-                                <input type="file" name="file" required="">
+                                <input type="file" name="file" required="" multiple="multiple">
                             </div>
                     </div>
                     <div class="modal-footer form-group">
@@ -146,6 +146,26 @@
         $('#additem').click(function(){
             $('#additems').modal();
         });
+        //隐藏提交的信息
+        function post(url, params) {
+            var temp = document.createElement("form"); //创建form表单
+            temp.action = url;
+            temp.method = "post";
+            temp.style.display = "none";//表单样式为隐藏
+            for (var item in params) {//初始化表单内部的控件
+               //根据实际情况创建不同的标签元素
+                var opt =document.createElement("input");  //添加input标签
+                opt.type="text";   //类型为text
+                opt.id = item;      //设置id属性
+                opt.name = item;    //设置name属性
+                opt.value = params[item];   //设置value属性
+                temp.appendChild(opt);
+            }
+
+            document.body.appendChild(temp);
+            temp.submit();
+            return temp;
+        }
         //删除提示
         async function del(obj){
             var item_id = obj.getAttribute('d');
@@ -161,6 +181,11 @@
                 window.location.href="/reset_date/"+item_id;
                 alert("清空成功！")
             }
+        }
+        // 导出操作
+        async function texport(obj){
+            var item_id = obj.getAttribute('d');
+            window.location.href = "javascript:post('/export_date',{item_id:"+item_id+"})";
         }
     </script>
 
